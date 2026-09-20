@@ -1,18 +1,38 @@
 // use prisma-8
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  role      String   @default("user")
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+  role     String @default("user")
+
   createdAt DateTime @default(now())
+
+  session Session[]
+  posts   Post[]
 }
 
 model Session {
-  id               Int      @id @default(autoincrement())
+  id               Int    @id @default(autoincrement())
   userId           Int
-  refreshTokenHash String   @unique
-  expiresAt        DateTime
-  createdAt        DateTime @default(now())
+  refreshTokenHash String @unique
+
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  title     String
+  content   String
+  published Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

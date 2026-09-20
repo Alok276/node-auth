@@ -1,9 +1,13 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 
-export function generateAccessToken(userId) {
+export function generateAccessToken(user) {
   return jwt.sign(
-    { userId },
+    { 
+      userId: user.id,
+      role: user.role
+
+    },
     process.env.JWT_SECRET,
     {
       expiresIn: '1h'
